@@ -1,0 +1,1014 @@
+/* Estilos mejorados para la pantalla de reservas */
+.reservation-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: visible; /* CAMBIADO: de hidden a visible */
+
+}
+
+.reservation-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(1deg); }
+}
+
+.reservation-header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 10;
+}
+
+.reservation-header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.reservation-header-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.reservation-back-btn {
+    padding: 0.75rem;
+    border: none;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.reservation-back-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.reservation-logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.reservation-logo-icon {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    padding: 1rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.reservation-logo-text h1 {
+    color: #2d3748;
+    font-size: 1.75rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.reservation-logo-text p {
+    color: #718096;
+    font-size: 1rem;
+}
+
+.reservation-stats {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.stat {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.stat:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.stat-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    position: relative;
+}
+
+.stat-indicator.available {
+    background: #48bb78;
+    box-shadow: 0 0 10px rgba(72, 187, 120, 0.6);
+}
+
+.stat-indicator.reserved {
+    background: #ed8936;
+    box-shadow: 0 0 10px rgba(237, 137, 54, 0.6);
+}
+
+.stat-indicator.occupied {
+    background: #e53e3e;
+    box-shadow: 0 0 10px rgba(229, 62, 62, 0.6);
+}
+
+.stat-text {
+    color: #4a5568;
+    font-weight: 600;
+}
+
+.reservation-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+    z-index: 5;
+}
+
+.reservation-grid {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 2rem;
+    height: calc(100vh - 200px);
+}
+
+/* Mapa del restaurante mejorado */
+.restaurant-map {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.restaurant-map::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        linear-gradient(135deg, transparent 0%, rgba(102, 126, 234, 0.05) 100%);
+    pointer-events: none;
+}
+
+.map-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.map-header h2 {
+    color: #2d3748;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.map-header p {
+    color: #718096;
+    font-size: 1.1rem;
+}
+
+.map-container {
+    background: 
+        linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    border-radius: 20px;
+    padding: 2.5rem;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 
+        inset 0 2px 10px rgba(0, 0, 0, 0.05),
+        0 8px 25px rgba(0, 0, 0, 0.1);
+    position: relative;
+    min-height: 600px;
+}
+
+/* Elementos del restaurante */
+.restaurant-elements {
+    position: absolute;
+    pointer-events: none;
+}
+
+.windows {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    right: 2rem;
+    height: 80px;
+    background: linear-gradient(135deg, #90cdf4, #63b3ed);
+    border-radius: 12px;
+    box-shadow: 
+        inset 0 -4px 8px rgba(0, 0, 0, 0.1),
+        0 4px 12px rgba(144, 205, 244, 0.4);
+}
+
+.bar-area {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    width: 120px;
+    height: 200px;
+    background: linear-gradient(135deg, #faf089, #f6e05e);
+    border-radius: 16px;
+    box-shadow: 
+        inset 0 -4px 8px rgba(0, 0, 0, 0.1),
+        0 6px 15px rgba(250, 240, 137, 0.3);
+}
+
+.kitchen {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    width: 100px;
+    height: 80px;
+    background: linear-gradient(135deg, #fc8181, #f56565);
+    border-radius: 12px;
+    box-shadow: 
+        inset 0 -4px 8px rgba(0, 0, 0, 0.1),
+        0 4px 12px rgba(252, 129, 129, 0.3);
+}
+
+.entrance {
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 120px;
+    background: linear-gradient(135deg, #9ae6b4, #68d391);
+    border-radius: 8px;
+    box-shadow: 
+        inset 0 -4px 8px rgba(0, 0, 0, 0.1),
+        0 4px 12px rgba(154, 230, 180, 0.3);
+}
+
+/* Grid de mesas mejorado */
+.tables-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 2rem;
+    height: 100%;
+    padding: 1rem;
+    position: relative;
+    z-index: 2;
+}
+
+.table-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.table-container.double {
+    grid-column: span 2;
+}
+
+/* Mesas con diseño realista */
+.table-btn {
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    cursor: pointer;
+    font-family: inherit;
+    background: transparent;
+}
+
+/* Mesas redondas */
+.table-btn.round {
+    width: 80px;
+    height: 80px;
+}
+
+.table-btn.round::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #e2e8f0, #cbd5e0);
+    border-radius: 50%;
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.15),
+        inset 0 2px 4px rgba(255, 255, 255, 0.8);
+    transition: all 0.4s ease;
+    z-index: 1;
+}
+
+.table-btn.round::after {
+    content: '';
+    position: absolute;
+    width: 70%;
+    height: 70%;
+    background: linear-gradient(135deg, #f7fafc, #edf2f7);
+    border-radius: 50%;
+    box-shadow: 
+        inset 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
+/* Mesas cuadradas */
+.table-btn.square {
+    width: 80px;
+    height: 80px;
+}
+
+.table-btn.square::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #e2e8f0, #cbd5e0);
+    border-radius: 12px;
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.15),
+        inset 0 2px 4px rgba(255, 255, 255, 0.8);
+    transition: all 0.4s ease;
+    z-index: 1;
+}
+
+.table-btn.square::after {
+    content: '';
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    background: linear-gradient(135deg, #f7fafc, #edf2f7);
+    border-radius: 8px;
+    box-shadow: 
+        inset 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
+/* Mesas rectangulares */
+.table-btn.rectangular {
+    width: 120px;
+    height: 60px;
+}
+
+.table-btn.rectangular::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #e2e8f0, #cbd5e0);
+    border-radius: 12px;
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.15),
+        inset 0 2px 4px rgba(255, 255, 255, 0.8);
+    transition: all 0.4s ease;
+    z-index: 1;
+}
+
+.table-btn.rectangular::after {
+    content: '';
+    position: absolute;
+    width: 90%;
+    height: 70%;
+    background: linear-gradient(135deg, #f7fafc, #edf2f7);
+    border-radius: 8px;
+    box-shadow: 
+        inset 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
+/* Estados de las mesas */
+.table-btn.available:hover::before {
+    transform: scale(1.1);
+    box-shadow: 
+        0 8px 25px rgba(72, 187, 120, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.8);
+}
+
+.table-btn.available::before {
+    background: linear-gradient(135deg, #9ae6b4, #68d391);
+}
+
+.table-btn.reserved::before {
+    background: linear-gradient(135deg, #fbd38d, #ed8936);
+}
+
+.table-btn.occupied::before {
+    background: linear-gradient(135deg, #fc8181, #f56565);
+}
+
+.table-btn.selected::before {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    transform: scale(1.15);
+    box-shadow: 
+        0 12px 30px rgba(102, 126, 234, 0.6),
+        inset 0 2px 4px rgba(255, 255, 255, 0.8);
+    animation: selected-pulse 2s infinite;
+}
+
+@keyframes selected-pulse {
+    0%, 100% { 
+        box-shadow: 
+            0 12px 30px rgba(102, 126, 234, 0.6),
+            inset 0 2px 4px rgba(255, 255, 255, 0.8);
+    }
+    50% { 
+        box-shadow: 
+            0 12px 40px rgba(102, 126, 234, 0.8),
+            inset 0 2px 4px rgba(255, 255, 255, 0.8);
+    }
+}
+
+/* Contenido de las mesas */
+.table-number {
+    color: #2d3748;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+    position: relative;
+    z-index: 3;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.table-capacity {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #4a5568;
+    font-size: 0.85rem;
+    position: relative;
+    z-index: 3;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Indicadores de estado */
+.available-indicator {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 16px;
+    height: 16px;
+    background: #48bb78;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 2px 8px rgba(72, 187, 120, 0.6);
+    z-index: 4;
+    animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+    75%, 100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+.selected-indicator {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 24px;
+    height: 24px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.6);
+    z-index: 4;
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+.selected-indicator span {
+    color: #667eea;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+/* Sidebar mejorado */
+.reservation-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.legend-card, .selected-table-card, .info-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.legend-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #2d3748;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+}
+
+.legend-header::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #667eea;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(102, 126, 234, 0.6);
+}
+
+.legend-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.legend-item:hover {
+    transform: translateX(5px);
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    position: relative;
+}
+
+.legend-color::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.legend-color.available::before {
+    background: linear-gradient(135deg, #9ae6b4, #68d391);
+}
+
+.legend-color.reserved::before {
+    background: linear-gradient(135deg, #fbd38d, #ed8936);
+}
+
+.legend-color.occupied::before {
+    background: linear-gradient(135deg, #fc8181, #f56565);
+}
+
+.legend-color.selected::before {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.legend-text p:first-child {
+    color: #2d3748;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.legend-text p:last-child {
+    color: #718096;
+    font-size: 0.875rem;
+}
+
+/* Panel de mesa seleccionada */
+.selected-table-card {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.selected-table-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.selected-table-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.selected-table-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    z-index: 2;
+}
+
+.table-detail {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.table-detail:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+.table-detail-label {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.table-detail-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.table-detail-value.capacity, .table-detail-value.location {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+}
+
+/* Botones de acción */
+.reservation-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.confirm-reservation-btn, .back-to-menu-btn {
+    padding: 1.25rem 1.5rem;
+    border: none;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.confirm-reservation-btn:enabled {
+    background: linear-gradient(135deg, #48bb78, #38a169);
+    color: white;
+    box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+}
+
+.confirm-reservation-btn:enabled:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(72, 187, 120, 0.6);
+}
+
+.confirm-reservation-btn:enabled::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+}
+
+.confirm-reservation-btn:enabled:hover::before {
+    left: 100%;
+}
+
+.confirm-reservation-btn:disabled {
+    background: #cbd5e0;
+    color: #a0aec0;
+    cursor: not-allowed;
+}
+
+.back-to-menu-btn {
+    background: rgba(255, 255, 255, 0.9);
+    color: #4a5568;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.back-to-menu-btn:hover {
+    background: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Info card mejorada */
+.info-card {
+    background: linear-gradient(135deg, #fed7d7, #feb2b2);
+    color: #742a2a;
+}
+
+.info-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.info-icon {
+    font-size: 1.5rem;
+    margin-top: 0.25rem;
+}
+
+.info-text p:first-child {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.info-text p:last-child {
+    opacity: 0.8;
+}
+
+/* Popup mejorado */
+.table-popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 2rem;
+    animation: fadeIn 0.3s ease;
+}
+
+.popup-content {
+    background: linear-gradient(135deg, #fff, #f7fafc);
+    border-radius: 24px;
+    box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    max-width: 450px;
+    width: 100%;
+    padding: 2.5rem;
+    position: relative;
+    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.popup-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    padding: 0.5rem;
+    border: none;
+    background: rgba(0, 0, 0, 0.1);
+    color: #4a5568;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.popup-close:hover {
+    background: rgba(0, 0, 0, 0.2);
+    transform: rotate(90deg);
+}
+
+.popup-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.popup-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    animation: bounceIn 0.6s ease;
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.popup-icon span {
+    color: white;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.popup-header h2 {
+    color: #2d3748;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.popup-header p {
+    color: #718096;
+    font-size: 1.1rem;
+}
+
+.popup-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.popup-detail {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(102, 126, 234, 0.1);
+    transition: all 0.3s ease;
+}
+
+.popup-detail:hover {
+    background: rgba(102, 126, 234, 0.1);
+    transform: translateX(5px);
+}
+
+.popup-detail.available {
+    background: rgba(72, 187, 120, 0.1);
+    border-color: rgba(72, 187, 120, 0.2);
+}
+
+.popup-detail.available:hover {
+    background: rgba(72, 187, 120, 0.15);
+}
+
+.popup-detail i {
+    font-size: 1.25rem;
+    color: #667eea;
+    width: 24px;
+}
+
+.popup-detail.available i {
+    color: #48bb78;
+}
+
+.detail-label {
+    color: #718096;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.detail-value {
+    color: #2d3748;
+    font-weight: 600;
+}
+
+.detail-value.available {
+    color: #48bb78;
+}
+
+.popup-close-btn {
+    width: 100%;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.popup-close-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .reservation-grid {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+    
+    .reservation-sidebar {
+        order: -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .reservation-header-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .reservation-stats {
+        justify-content: center;
+    }
+    
+    .tables-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    .map-container {
+        padding: 1rem;
+    }
+}

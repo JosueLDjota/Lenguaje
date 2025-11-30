@@ -54,10 +54,6 @@ function renderWelcomeScreen() {
                             <i class="fas fa-user"></i>
                             <span>Cuenta</span>
                         </button><br>
-                        <button class="nav-link" data-screen="login">
-                            <i class="fas fa-user"></i>
-                            <span></span>
-                        </button><br>
                     </nav>
                 </header>
                 <main class="welcome-main">
@@ -495,4 +491,5 @@ function setupModal(modal) {
             modal.removeEventListener('animationend', handler);
         }
     });
+
 }

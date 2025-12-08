@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabor & Arte Restaurante</title>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts para tipografía premium -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Principal -->
+    <link rel="stylesheet" href="styles/main.css">
+    
+    <!-- Estilos específicos de pantallas -->
+    <link rel="stylesheet" href="styles/welcome.css">
+    <link rel="stylesheet" href="styles/menu.css">
+    <link rel="stylesheet" href="styles/cart.css">
+    <link rel="stylesheet" href="styles/reservation.css">
+    <link rel="stylesheet" href="styles/login.css">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    
+    <!-- CSS para animaciones y efectos -->
+    <link rel="stylesheet" href="styles/animations.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <!-- Metatags para redes sociales -->
+    <meta property="og:title" content="Sabor & Arte Restaurante">
+    <meta property="og:description" content="Experiencia culinaria única donde cada plato es una obra de arte">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1667388968964-4aa652df0a9b">
+    <meta property="og:url" content="">
+    
+    <style>
+        /* Estilos iniciales para prevenir FOUC (Flash of Unstyled Content) */
+        body {
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in forwards;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        /* Loading inicial */
+        #initial-loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0a0f 0%, #141824 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .loading-logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            animation: logoPulse 2s infinite ease-in-out;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+        }
+        
+        .loading-logo i {
+            font-size: 3.5rem;
+            color: white;
+        }
+        
+        .loading-text {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 1rem;
+            opacity: 0.8;
+            animation: textPulse 2s infinite ease-in-out;
+        }
+        
+        .loading-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 2rem;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .loading-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            animation: loadingProgress 1.5s ease-in-out forwards;
+        }
+        
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        @keyframes textPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes loadingProgress {
+            to { width: 100%; }
+        }
+        
+        /* ESTILOS AÑADIDOS PARA NOTIFICACIONES ESTABLES */
+        .notification-stable {
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+        }
+        
+        .notification-fixed {
+            position: relative !important;
+            z-index: 9998 !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading inicial -->
+    <div id="initial-loading">
+        <div class="loading-logo">
+            <i class="fas fa-utensils"></i>
+        </div>
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+        <div class="loading-text">Cargando experiencia...</div>
+    </div>
+    
+    <!-- Navegación entre pantallas - MEJORADA PROFESIONALMENTE -->
+        <!-- Indicador de pantalla activa -->
+        <div class="nav-highlight"></div>
+    </nav>
+
+    <!-- Pantallas con transiciones profesionales -->
+    <div class="screens-container">
+        <div id="welcome" class="screen active"></div>
+        <div id="menu" class="screen"></div>
+        <div id="cart" class="screen"></div>
+        <div id="reservation" class="screen"></div>
+        <div id="login" class="screen"></div>
+        <div id="dashboard" class="screen"></div>
+    </div>
+
+    <!-- Notificaciones flotantes -->
+    <div id="notification-container" style="display: none;"></div>
+    
+    <!-- Audio para efectos (opcional) -->
+    <audio id="nav-sound" preload="auto">
+        <source src="sounds/nav-click.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="notification-sound" preload="auto">
+        <source src="sounds/notification.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Scripts en orden optimizado -->
+    <script src="scripts/main.js"></script>
+    <script src="scripts/welcome.js"></script>
+    
+    <!-- Precargar otros scripts -->
+    <script>
+        // VARIABLES GLOBALES MEJORADAS PARA NOTIFICACIONES
+        let isNotificationSystemReady = false;
+        let pendingNotifications = [];
+        let activeNotifications = new Set();
+        let notificationIdCounter = 0;
+        
+        // Ocultar loading cuando todo esté listo
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const loading = document.getElementById('initial-loading');
+                loading.style.opacity = '0';
+                loading.style.transform = 'translateY(-20px)';
+                
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                    document.body.style.opacity = '1';
+                    
+                    // Iniciar animaciones de entrada
+                    document.body.classList.add('loaded');
+                    
+                    // INICIALIZAR SISTEMA DE NOTIFICACIONES PRIMERO
+                    initializeNotificationSystem();
+                    
+                    // Mostrar notificación de bienvenida DESPUÉS DE 1 SEGUNDO
+                    setTimeout(() => {
+                        showStableNotification('¡Bienvenido a Sabor & Arte!', 'success', 4000);
+                    }, 1000);
+                    
+                }, 500);
+            }, 800);
+        });
+        
+        // FUNCIÓN MEJORADA PARA INICIALIZAR SISTEMA DE NOTIFICACIONES
+        function initializeNotificationSystem() {
+            const container = document.getElementById('notification-container');
+            if (!container) {
+                const newContainer = document.createElement('div');
+                newContainer.id = 'notification-container';
+                document.body.appendChild(newContainer);
+            }
+            
+            // Mostrar contenedor
+            container.style.display = 'flex';
+            isNotificationSystemReady = true;
+            
+            // Procesar notificaciones pendientes
+            processPendingNotifications();
+        }
+        
+        // PROCESAR NOTIFICACIONES PENDIENTES
+        function processPendingNotifications() {
+            if (pendingNotifications.length > 0) {
+                // Mostrar primera notificación pendiente
+                const notif = pendingNotifications.shift();
+                setTimeout(() => {
+                    showStableNotification(notif.message, notif.type, notif.duration || 4000);
+                    // Procesar siguiente después de un delay
+                    if (pendingNotifications.length > 0) {
+                        setTimeout(processPendingNotifications, 500);
+                    }
+                }, 300);
+            }
+        }
+        
+        // FUNCIÓN MEJORADA PARA MOSTRAR NOTIFICACIONES ESTABLES
+        function showStableNotification(message, type = 'info', duration = 4000) {
+            // Si el sistema no está listo, guardar en cola
+            if (!isNotificationSystemReady) {
+                pendingNotifications.push({ message, type, duration });
+                return;
+            }
+            
+            const container = document.getElementById('notification-container');
+            if (!container) return;
+            
+            // ID único para esta notificación
+            const notificationId = 'notif-' + (++notificationIdCounter);
+            
+            // Crear elemento de notificación
+            const notification = document.createElement('div');
+            notification.id = notificationId;
+            notification.className = `notification notification-${type} notification-stable notification-fixed`;
+            notification.setAttribute('data-id', notificationId);
+            
+            // Contenido de la notificación
+            notification.innerHTML = `
+                <div class="notification-icon">
+                    <i class="fas fa-${getIconForType(type)}"></i>
+                </div>
+                <div class="notification-content">
+                    <p>${message}</p>
+                </div>
+                <button class="notification-close" onclick="closeNotification('${notificationId}')">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            // Añadir al contenedor
+            container.appendChild(notification);
+            
+            // Añadir a conjunto de notificaciones activas
+            activeNotifications.add(notificationId);
+            
+            // Animación de entrada CON RETRASO PARA EVITAR BUGS
+            setTimeout(() => {
+                if (document.getElementById(notificationId)) {
+                    notification.classList.add('show');
+                }
+            }, 50);
+            
+            // Reproducir sonido
+            playNotificationSound();
+            
+            // Auto-remover después de la duración especificada
+            if (duration > 0) {
+                setTimeout(() => {
+                    closeNotification(notificationId);
+                }, duration);
+            }
+            
+            return notificationId;
+        }
+        
+        // FUNCIÓN PARA CERRAR NOTIFICACIÓN
+        function closeNotification(notificationId) {
+            const notification = document.getElementById(notificationId);
+            if (!notification || !notification.classList.contains('show')) return;
+            
+            // Remover clase show para animar salida
+            notification.classList.remove('show');
+            
+            // Esperar a que termine la animación antes de remover
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+                activeNotifications.delete(notificationId);
+                
+                // Ocultar contenedor si no hay notificaciones
+                const container = document.getElementById('notification-container');
+                if (container && container.children.length === 0) {
+                    container.style.display = 'none';
+                }
+            }, 500); // 500ms para la animación de salida
+        }
+        
+        // FUNCIÓN AUXILIAR PARA OBTENER ICONO
+        function getIconForType(type) {
+            switch(type) {
+                case 'success': return 'check-circle';
+                case 'error': return 'exclamation-circle';
+                case 'warning': return 'exclamation-triangle';
+                default: return 'info-circle';
+            }
+        }
+        
+        // FUNCIÓN PARA REPRODUCIR SONIDO
+        function playNotificationSound() {
+            try {
+                const sound = document.getElementById('notification-sound');
+                if (sound) {
+                    sound.currentTime = 0;
+                    sound.play().catch(() => {
+                        // Silenciar error si no puede reproducir
+                    });
+                }
+            } catch (e) {
+                // Ignorar errores de audio
+            }
+        }
+        
+        // FUNCIÓN COMPATIBLE (para código existente)
+        function showNotification(message, type = 'info') {
+            // Usar el nuevo sistema estable
+            return showStableNotification(message, type, 4000);
+        }
+        
+        // Inicializar navegación mejorada
+        function initEnhancedNavigation() {
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const navHighlight = document.querySelector('.nav-highlight');
+            let activeButton = document.querySelector('.nav-btn[data-screen="welcome"]');
+            
+            // Posicionar highlight en el botón activo inicial
+            if (activeButton && navHighlight) {
+                const rect = activeButton.getBoundingClientRect();
+                const containerRect = document.querySelector('.nav-buttons').getBoundingClientRect();
+                
+                navHighlight.style.width = `${rect.width}px`;
+                navHighlight.style.height = `${rect.height}px`;
+                navHighlight.style.transform = `translateX(${rect.left - containerRect.left}px)`;
+                navHighlight.style.opacity = '1';
+            }
+            
+            navButtons.forEach(button => {
+                // Efecto hover
+                button.addEventListener('mouseenter', function() {
+                    this.classList.add('hover');
+                    
+                    // Efecto de sonido
+                    const sound = document.getElementById('nav-sound');
+                    if (sound) {
+                        sound.currentTime = 0;
+                        sound.volume = 0.3;
+                        sound.play().catch(e => console.log('Audio error:', e));
+                    }
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.classList.remove('hover');
+                });
+                
+                // Efecto click
+                button.addEventListener('click', function() {
+                    // Actualizar highlight
+                    if (navHighlight) {
+                        const rect = this.getBoundingClientRect();
+                        const containerRect = document.querySelector('.nav-buttons').getBoundingClientRect();
+                        
+                        navHighlight.style.width = `${rect.width}px`;
+                        navHighlight.style.height = `${rect.height}px`;
+                        navHighlight.style.transform = `translateX(${rect.left - containerRect.left}px)`;
+                        navHighlight.style.opacity = '1';
+                    }
+                    
+                    // Efecto de pulso
+                    this.classList.add('clicked');
+                    setTimeout(() => this.classList.remove('clicked'), 300);
+                });
+            });
+        }
+        
+        // Cargar scripts restantes dinámicamente
+        function loadRemainingScripts() {
+            const scripts = [
+                'scripts/menu.js',
+                'scripts/cart.js',
+                'scripts/reservation.js',
+                'scripts/login.js',
+                'scripts/dashboard.js',
+                'scripts/reports.js'
+            ];
+            
+            scripts.forEach(src => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.async = true;
+                document.body.appendChild(script);
+            });
+        }
+        
+        // Inicializar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', function() {
+            initEnhancedNavigation();
+            loadRemainingScripts();
+            
+            // Actualizar contador del carrito periódicamente
+            setInterval(() => {
+                if (typeof getCartTotalItems === 'function') {
+                    try {
+                        const count = getCartTotalItems();
+                        const counter = document.getElementById('cart-counter');
+                        if (counter) {
+                            counter.textContent = count;
+                            counter.classList.toggle('has-items', count > 0);
+                            
+                            // Efecto de pulso si hay nuevos items
+                            if (count > parseInt(counter.dataset.lastCount || 0)) {
+                                counter.classList.add('pulse');
+                                setTimeout(() => counter.classList.remove('pulse'), 1000);
+                            }
+                            counter.dataset.lastCount = count;
+                        }
+                    } catch (e) {
+                        console.log('Error actualizando carrito:', e);
+                    }
+                }
+            }, 1000);
+            
+            // Efectos de partículas de fondo
+            createBackgroundParticles();
+        });
+        
+        // Sistema de partículas para fondo
+        function createBackgroundParticles() {
+            const colors = [
+                'rgba(102, 126, 234, 0.15)',
+                'rgba(139, 92, 246, 0.15)',
+                'rgba(59, 130, 246, 0.15)',
+                'rgba(245, 158, 11, 0.15)',
+                'rgba(16, 185, 129, 0.15)'
+            ];
+            
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'background-particle';
+                
+                const size = Math.random() * 100 + 50;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const duration = Math.random() * 20 + 20;
+                const delay = Math.random() * 5;
+                
+                particle.style.cssText = `
+                    position: fixed;
+                    width: ${size}px;
+                    height: ${size}px;
+                    background: ${color};
+                    border-radius: 50%;
+                    filter: blur(40px);
+                    z-index: -1;
+                    opacity: ${Math.random() * 0.3 + 0.1};
+                    animation: particleFloat ${duration}s linear infinite;
+                    animation-delay: ${delay}s;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                `;
+                
+                document.body.appendChild(particle);
+            }
+            
+            // Agregar animación CSS
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes particleFloat {
+                    0% {
+                        transform: translate(0, 0) scale(1);
+                    }
+                    25% {
+                        transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) scale(1.1);
+                    }
+                    50% {
+                        transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) scale(0.9);
+                    }
+                    75% {
+                        transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) scale(1.05);
+                    }
+                    100% {
+                        transform: translate(0, 0) scale(1);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Detectar conexión
+        window.addEventListener('online', () => {
+            showStableNotification('Conexión restablecida', 'success', 3000);
+        });
+        
+        window.addEventListener('offline', () => {
+            showStableNotification('Estás trabajando sin conexión', 'warning', 3000);
+        });
+        
+        // Hacer funciones globales
+        window.showNotification = showNotification;
+        window.showStableNotification = showStableNotification;
+        window.closeNotification = closeNotification;
+    </script>
+    
+    <!-- Estilos para mejoras visuales -->
+    <style>
+        /* Navegación mejorada */
+        .nav-container {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 24px;
+            padding: 0.5rem;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                0 8px 32px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+        
+        .nav-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(102, 126, 234, 0.2) 0%, 
+                rgba(139, 92, 246, 0.15) 100%);
+            opacity: 0.3;
+            z-index: -1;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 0.5rem;
+            position: relative;
+        }
+        
+        .nav-btn {
+            background: transparent;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            border-radius: 16px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 70px;
+            overflow: hidden;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn.hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .nav-btn.clicked {
+            transform: scale(0.95);
+        }
+        
+        .nav-icon {
+            position: relative;
+            font-size: 1.2rem;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        
+        .nav-btn:hover .nav-label {
+            opacity: 1;
+        }
+        
+        .nav-indicator {
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-btn.active .nav-indicator {
+            transform: translateX(-50%) scaleX(1);
+        }
+        
+        .nav-hover-effect {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transition: left 0.6s;
+        }
+        
+        .nav-btn:hover .nav-hover-effect {
+            left: 100%;
+        }
+        
+        .nav-highlight {
+            position: absolute;
+            top: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            z-index: -1;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+        }
+        
+        /* Badge del carrito */
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .cart-badge.has-items {
+            animation: badgePulse 2s infinite;
+        }
+        
+        .cart-badge.pulse {
+            animation: badgeBounce 0.5s ease;
+        }
+        
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @keyframes badgeBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+        
+        /* NOTIFICACIONES MEJORADAS - SIN BUGS */
+        #notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9998;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 400px;
+            min-height: 0;
+            pointer-events: none;
+        }
+        
+        .notification {
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(20px);
+            border-radius: 14px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.15),
+                0 4px 12px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            transform: translateX(120%) scale(0.9);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-width: 100%;
+            word-wrap: break-word;
+            pointer-events: auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .notification::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--notification-color, #667eea), transparent);
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .notification-success::before {
+            --notification-color: #10b981;
+        }
+        
+        .notification-error::before {
+            --notification-color: #ef4444;
+        }
+        
+        .notification-info::before {
+            --notification-color: #3b82f6;
+        }
+        
+        .notification-warning::before {
+            --notification-color: #f59e0b;
+        }
+        
+        .notification.show {
+            transform: translateX(0) scale(1);
+            opacity: 1;
+        }
+        
+        .notification-icon {
+            font-size: 1.3rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: rgba(var(--notification-rgb, 102, 126, 234), 0.1);
+            color: rgb(var(--notification-rgb, 102, 126, 234));
+        }
+        
+        .notification-success .notification-icon {
+            --notification-rgb: 16, 185, 129;
+        }
+        
+        .notification-error .notification-icon {
+            --notification-rgb: 239, 68, 68;
+        }
+        
+        .notification-info .notification-icon {
+            --notification-rgb: 59, 130, 246;
+        }
+        
+        .notification-warning .notification-icon {
+            --notification-rgb: 245, 158, 11;
+        }
+        
+        .notification-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .notification-content p {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #1f2937;
+            line-height: 1.4;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        
+        .notification-close {
+            background: transparent;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .notification-close:hover {
+            color: #374151;
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        .notification-close:active {
+            transform: scale(0.95);
+        }
+        
+        /* Pantallas con transiciones */
+        .screens-container {
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+        
+        .screen.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+        
+        /* Efectos de partículas de fondo */
+        .background-particle {
+            pointer-events: none;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                bottom: 1rem;
+                padding: 0.4rem;
+            }
+            
+            .nav-btn {
+                padding: 0.6rem 0.8rem;
+                min-width: 60px;
+            }
+            
+            .nav-icon {
+                font-size: 1rem;
+            }
+            
+            .nav-label {
+                font-size: 0.65rem;
+            }
+            
+            #notification-container {
+                right: 12px;
+                left: 12px;
+                max-width: calc(100vw - 24px);
+                top: 12px;
+            }
+            
+            .notification {
+                padding: 14px 16px;
+                border-radius: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .nav-container {
+                border-radius: 20px;
+            }
+            
+            .nav-btn {
+                padding: 0.5rem;
+                min-width: 55px;
+            }
+            
+            .nav-label {
+                display: none;
+            }
+            
+            .notification {
+                padding: 12px 14px;
+                gap: 12px;
+            }
+            
+            .notification-content p {
+                font-size: 0.9rem;
+            }
+            
+            .notification-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 1.1rem;
+            }
+            
+            #notification-container {
+                gap: 8px;
+            }
+        }
+        
+        /* ANIMACIONES MEJORADAS PARA NOTIFICACIONES */
+        @keyframes notificationSlideIn {
+            from {
+                transform: translateX(120%) scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0) scale(1);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes notificationSlideOut {
+            from {
+                transform: translateX(0) scale(1);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(120%) scale(0.9);
+                opacity: 0;
+            }
+        }
+        
+        /* EFECTO DE PROGRESO PARA AUTO-CIERRE */
+        .notification-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--notification-color, #667eea), transparent);
+            width: 100%;
+            transform-origin: left;
+            animation: progressBar 4s linear forwards;
+            border-radius: 0 0 3px 3px;
+        }
+        
+        @keyframes progressBar {
+            from { transform: scaleX(1); }
+            to { transform: scaleX(0); }
+        }
+    </style>
+</body>
+</html>
